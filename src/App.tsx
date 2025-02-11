@@ -4,6 +4,22 @@ import { FormDialog } from "./FormDialog";
 import { ActionButton } from "./components/ActionButton";
 import { SideBar } from "./components/SideBar";
 import { TodoItem } from "./components/TodoItem";
+import { ToolBar } from './components/ToolBar';
+import { GlobalStyles } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { indigo, pink } from "@mui/material/colors";
+
+// テーマを作成
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: indigo[500],
+    },
+    secondary: {
+      main: pink[500],
+    },
+  },
+});
 
 export const App = () => {
   // 初期値：空文字
@@ -12,6 +28,8 @@ export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([])
 
   const [filter, setFilter] = useState<Filter>('all')
+
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value)
@@ -36,13 +54,9 @@ export const App = () => {
     setText('')
   }
 
-
-
-
   const handleEmpty = () => {
     setTodos((todos) => todos.filter((todo) => !todo.removed))
   }
-
 
   const handleTodo = <K extends keyof Todo, V extends Todo[K]>(
     id: number,
@@ -63,15 +77,21 @@ export const App = () => {
     })
   }
 
+  const handleToggleDrawer = () => {
+    setDrawerOpen((prev) => !prev)
+  }
+
   return (
-    <div>
-      <SideBar onFilter={setFilter} />
+    <ThemeProvider theme={theme}>
+      <GlobalStyles styles={{ body: { margin: 0, padding: 0, backgroundColor: '#f0f0f0' } }} />
+      <ToolBar filter={filter} onToggleDrawer={handleToggleDrawer} />
+      <SideBar onFilter={setFilter} drawerOpen={drawerOpen} onToggleDrawer={handleToggleDrawer} />
       <FormDialog
         text={text}
         onChange={handleChange}
         onSubmit={handleSubmit} />
       <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
       <ActionButton todos={todos} onEmpty={handleEmpty} />
-    </div>
+    </ThemeProvider>
   );
 };
