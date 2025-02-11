@@ -8,6 +8,7 @@ import { ToolBar } from './components/ToolBar';
 import { GlobalStyles } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { indigo, pink } from "@mui/material/colors";
+import { QR } from "./components/QR";
 
 // テーマを作成
 const theme = createTheme({
@@ -30,6 +31,8 @@ export const App = () => {
   const [filter, setFilter] = useState<Filter>('all')
 
   const [drawerOpen, setDrawerOpen] = useState(false)
+
+  const [qrOpen, setQrOpen] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value)
@@ -81,11 +84,20 @@ export const App = () => {
     setDrawerOpen((prev) => !prev)
   }
 
+  const handleToggleQR = () => {
+    setQrOpen((prev) => !prev)
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles styles={{ body: { margin: 0, padding: 0, backgroundColor: '#f0f0f0' } }} />
       <ToolBar filter={filter} onToggleDrawer={handleToggleDrawer} />
-      <SideBar onFilter={setFilter} drawerOpen={drawerOpen} onToggleDrawer={handleToggleDrawer} />
+      <SideBar
+        drawerOpen={drawerOpen}
+        onToggleQR={handleToggleQR}
+        onFilter={setFilter}
+        onToggleDrawer={handleToggleDrawer} />
+      <QR open={qrOpen} onClose={handleToggleQR} />
       <FormDialog
         text={text}
         onChange={handleChange}

@@ -39,6 +39,7 @@ const DrawerAvatar = styled(Avatar)(({ theme }) => ({
 
 type Props = {
   drawerOpen: boolean
+  onToggleQR: () => void
   onToggleDrawer: () => void
   onFilter: (filter: Filter) => void
 }
@@ -87,6 +88,14 @@ export const SideBar = (props: Props) => (
               <Icon>delete</Icon>
             </ListItemIcon>
             <ListItemText primary="ゴミ箱" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton aria-label='list-share' onClick={props.onToggleQR}>
+            <ListItemIcon>
+              <Icon>share</Icon>
+            </ListItemIcon>
+            <ListItemText primary="このアプリを共有" />
           </ListItemButton>
         </ListItem>
       </List>
