@@ -1,5 +1,5 @@
 // ReactからuseStateフックをインポート
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormDialog } from "./FormDialog";
 import { ActionButton } from "./components/ActionButton";
 import { SideBar } from "./components/SideBar";
@@ -10,6 +10,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { indigo, pink } from "@mui/material/colors";
 import { QR } from "./components/QR";
 import { AlertDialog } from "./components/AlertDialog";
+import localforage from "localforage";
+import { isTodos } from './lib/isTodos'
 
 // テーマを作成
 const theme = createTheme({
@@ -108,6 +110,18 @@ export const App = () => {
   const handleToggleAlert = () => {
     setAlertOpen((prev) => !prev)
   }
+
+  useEffect(() => {
+    localforage.getItem<Todo[]>('todos').then((value) => {
+      if (isTodos(value)) {
+        setTodos(value)
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    localforage.setItem('todos', todos)
+  }, [todos])
 
   return (
     <ThemeProvider theme={theme}>
