@@ -1,3 +1,4 @@
+import { registerSW } from 'virtual:pwa-register'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { App } from './App.tsx'
@@ -9,3 +10,6 @@ root.render(
     <App />
   </StrictMode>
 );
+
+// サービスワーカーの登録
+registerSW()
